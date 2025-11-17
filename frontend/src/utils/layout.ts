@@ -1,8 +1,8 @@
-import type { GraphEdge, GraphNode } from "@/types/graph";
+import type { BaseGraphNode, GraphEdge } from "@/types/graph";
 
 export const computeDomeLayout = (
 	selectedId: string,
-	nodes: GraphNode[],
+	nodes: BaseGraphNode[],
 	edges: GraphEdge[],
 ): Record<string, [number, number, number]> => {
 	// Build adjacency list

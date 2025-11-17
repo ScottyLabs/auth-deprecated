@@ -86,7 +86,7 @@ const Graph = () => {
 					return (
 						<GraphNodeDisplay
 							key={node.id}
-							character={node}
+							node={node}
 							distance={distance}
 							isSelected={selectedId === node.id}
 							onClick={() => setSelectedId(node.id)}

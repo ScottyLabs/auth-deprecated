@@ -1,18 +1,18 @@
 import { Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import * as THREE from "three";
-import type { GraphNode } from "@/types/graph";
+import type { PositionedGraphNode } from "@/types/graph";
 
 interface Props {
-	character: GraphNode;
+	node: PositionedGraphNode;
 	isSelected: boolean;
 	onClick: () => void;
 	distance?: number;
 }
 
 const GraphNodeDisplay = ({
-	character,
+	node,
 	isSelected,
 	onClick,
 	distance = 0,
@@ -21,20 +21,17 @@ const GraphNodeDisplay = ({
 	const meshRef = useRef<THREE.Mesh>(null);
 	const ringRef = useRef<THREE.Mesh>(null);
 	const [hovered, setHovered] = useState(false);
-	const [texture, setTexture] = useState<THREE.Texture>();
+	const [texture, _setTexture] = useState<THREE.Texture>();
 
-	useEffect(() => {
-		const loader = new THREE.TextureLoader();
-		loader.load(character.image, setTexture);
-	}, [character.image]);
+	// useEffect(() => {
+	// 	const loader = new THREE.TextureLoader();
+	// 	loader.load(node.image, setTexture);
+	// }, [node.image]);
 
 	useFrame((state) => {
 		// Smooth movement toward its target position
 		if (groupRef.current) {
-			groupRef.current.position.lerp(
-				new THREE.Vector3(...character.position),
-				0.15,
-			);
+			groupRef.current.position.lerp(new THREE.Vector3(...node.position), 0.15);
 		}
 
 		// Animate rotation ring
@@ -57,10 +54,7 @@ const GraphNodeDisplay = ({
 	});
 
 	// Compute transparency based on depth and distance
-	const zDepthOpacity = Math.max(
-		0.3,
-		1 - Math.abs(character.position[2]) * 0.25,
-	);
+	const zDepthOpacity = Math.max(0.3, 1 - Math.abs(node.position[2]) * 0.25);
 	const distOpacity =
 		distance === 0 ? 1 : distance === 1 ? 0.8 : distance === 2 ? 0.5 : 0.25;
 	const finalOpacity = Math.max(0.1, zDepthOpacity * distOpacity);
@@ -119,7 +113,7 @@ const GraphNodeDisplay = ({
 								: "bg-slate-800/80 border-slate-600 text-white"
 						}`}
 					>
-						{character.name}
+						{node.name}
 					</div>
 				</div>
 			</Html>
