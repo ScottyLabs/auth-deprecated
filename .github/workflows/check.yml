@@ -20,9 +20,10 @@ jobs:
             bun-version: latest 
 
       - name: Install dependencies and generate OpenAPI spec
-        run: bun install
-        run: bun run tsoa
-        run: bun run openapi
+        run: |
+          bun install
+          bun run tsoa
+          bun run openapi
 
       - name: Check
         run: bun run check
