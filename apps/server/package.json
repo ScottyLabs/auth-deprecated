@@ -1,0 +1,27 @@
+{
+  "name": "@graph/server",
+  "type": "module",
+  "version": "0.0.0",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "tsoa": "^6.6.0",
+    "zod": "^4.1.13"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/express": "^5.0.5",
+    "dotenv-cli": "^11.0.0"
+  },
+  "private": true,
+  "scripts": {
+    "build": "bun build src/server.ts --outdir=dist --target=bun --sourcemap",
+    "check": "tsc -b && biome check",
+    "dev": "bun run server",
+    "format": "biome format",
+    "lint": "biome lint",
+    "server": "dotenv -e .env -- bun run --watch src/server.ts",
+    "start": "bun dist/server.js",
+    "tsc": "tsc -b"
+  }
+}
