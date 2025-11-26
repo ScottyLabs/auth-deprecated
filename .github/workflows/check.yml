@@ -18,6 +18,11 @@ jobs:
       - uses: oven-sh/setup-bun@v2
         with:
             bun-version: latest 
-      - run: bun install
+
+      - name: Install dependencies and generate OpenAPI spec
+        run: bun install
+        run: bun run tsoa
+        run: bun run openapi
+
       - name: Check
         run: bun run check
