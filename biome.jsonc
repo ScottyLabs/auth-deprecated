@@ -8,12 +8,11 @@
 	"files": {
 		"ignoreUnknown": false,
 		"includes": [
-			"**/src/**/*",
-			"**/.vscode/**/*",
-			"**/index.html",
-			"**/vite.config.js",
+			"**",
 			"!**/src/routeTree.gen.ts",
-			"!**/src/styles.css"
+			"!**/dist",
+			"!**/build",
+			"!**/.turbo"
 		]
 	},
 	"formatter": {
@@ -30,6 +29,11 @@
 	"javascript": {
 		"formatter": {
 			"quoteStyle": "double"
+		}
+	},
+	"css": {
+		"parser": {
+			"tailwindDirectives": true
 		}
 	}
 }
