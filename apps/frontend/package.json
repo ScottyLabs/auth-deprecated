@@ -9,7 +9,8 @@
     "test": "vitest run",
     "format": "biome format",
     "lint": "biome lint",
-    "check": "biome check"
+    "check": "biome check",
+    "check-types": "tsc -b"
   },
   "dependencies": {
     "@clerk/clerk-react": "^5.49.0",
