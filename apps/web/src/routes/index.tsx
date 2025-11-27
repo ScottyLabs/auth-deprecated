@@ -1,10 +1,23 @@
 import { createFileRoute } from "@tanstack/react-router";
-import Graph from "@/components/Graph";
+import { useAuth } from "react-oidc-context";
+import Hello from "@/components/Hello";
 
 export const Route = createFileRoute("/")({
   component: App,
 });
 
 function App() {
-  return <Graph />;
+  const auth = useAuth();
+
+  if (!auth.isAuthenticated) {
+    return (
+      <div>
+        <button type="button" onClick={() => auth.signinRedirect()}>
+          Sign In
+        </button>
+      </div>
+    );
+  }
+
+  return <Hello />;
 }
