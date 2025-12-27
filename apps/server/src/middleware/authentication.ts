@@ -1,14 +1,9 @@
 // https://tsoa-community.github.io/docs/authentication.html#authentication
 // https://medium.com/@alexandre.penombre/tsoa-the-library-that-will-supercharge-your-apis-c551c8989081
 import type * as express from "express";
-import jwt from "jsonwebtoken";
-import jwksClient from "jwks-rsa";
-import env from "../env";
 
-export const BEARER_AUTH = "bearerAuth";
+export const OIDC_AUTH = "oidc";
 export const ADMIN_SCOPE = "graph-admins";
-
-const client = jwksClient({ jwksUri: env.AUTH_JWKS_URI });
 
 export function expressAuthentication(
   request: express.Request,
@@ -17,62 +12,25 @@ export function expressAuthentication(
 ) {
   return new Promise((resolve, reject) => {
     const response = request.res;
-    if (securityName !== BEARER_AUTH) {
+    if (securityName !== OIDC_AUTH) {
       response?.status(401).json({ message: "Invalid security name" });
       return reject({});
     }
 
-    const token = request.headers.authorization?.split(" ")[1];
-    if (!token) {
-      response?.status(401).json({ message: "No token provided" });
+    if (!request.user) {
       return reject({});
     }
 
-    return verifyToken(token, response, reject, resolve, scopes);
+    // Check if the token contains the required scopes
+    for (const scope of scopes ?? []) {
+      if (!request.user.groups?.includes(scope)) {
+        response
+          ?.status(401)
+          .json({ message: "JWT does not contain required scope." });
+        return reject({});
+      }
+    }
+
+    return resolve({ ...request.user });
   });
 }
-
-const verifyToken = async (
-  token: string,
-  response: express.Response | undefined,
-  reject: (value: unknown) => void,
-  resolve: (value: unknown) => void,
-  scopes?: string[],
-) => {
-  jwt.verify(
-    token,
-    (header, callback) => {
-      client.getSigningKey(header.kid, (_error, key) => {
-        const signingKey = key?.getPublicKey();
-        callback(null, signingKey);
-      });
-    },
-    { issuer: env.AUTH_ISSUER },
-    (error, decoded) => {
-      // Check if the token is valid
-      if (error) {
-        console.error("Authentication error:", error.message);
-        response?.status(401).json({ message: "Invalid token" });
-        return reject({});
-      }
-
-      // Check if the token format is valid
-      if (!decoded || typeof decoded !== "object") {
-        response?.status(401).json({ message: "Invalid token format" });
-        return reject({});
-      }
-
-      // Check if the token contains the required scopes
-      for (const scope of scopes ?? []) {
-        if (!decoded["groups"]?.includes(scope)) {
-          response
-            ?.status(401)
-            .json({ message: "JWT does not contain required scope." });
-          return reject({});
-        }
-      }
-
-      return resolve({ token });
-    },
-  );
-};

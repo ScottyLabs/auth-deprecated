@@ -17,7 +17,7 @@ const AuthHello = () => {
     return <div>Error getting authenticated hello: see console</div>;
   }
 
-  return <div>Authenticated Message: {helloAuthenticated?.message}</div>;
+  return <div>Admin Message: {helloAuthenticated?.message}</div>;
 };
 
 export default AuthHello;

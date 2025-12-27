@@ -1,9 +1,9 @@
 export const helloService = {
-  hello: () => {
-    return { message: "Hello, world!" };
+  hello: (user: Express.User) => {
+    return { message: `Hello, ${user.given_name}!` };
   },
 
-  helloAuthenticated: () => {
-    return { message: "Hello, authenticated!" };
+  helloAuthenticated: (user: Express.User) => {
+    return { message: `Hello, admin ${user.given_name}!` };
   },
 };

@@ -3,17 +3,18 @@ import { Get, Request, Route, Security } from "tsoa";
 import { ADMIN_SCOPE } from "../middleware/authentication";
 import { helloService } from "../services/helloService";
 
-@Security("bearerAuth")
+@Security("oidc")
 @Route("hello")
 export class HelloController {
   @Get("/")
-  async getHello(@Request() _req: ExpressRequest) {
-    return helloService.hello();
+  async getHello(@Request() req: ExpressRequest) {
+    console.log(req.user);
+    return helloService.hello(req.user as Express.User);
   }
 
-  @Security("bearerAuth", [ADMIN_SCOPE])
+  @Security("oidc", [ADMIN_SCOPE])
   @Get("/authenticated")
-  async getAuthenticated(@Request() _req: ExpressRequest) {
-    return helloService.helloAuthenticated();
+  async getAuthenticated(@Request() req: ExpressRequest) {
+    return helloService.helloAuthenticated(req.user as Express.User);
   }
 }

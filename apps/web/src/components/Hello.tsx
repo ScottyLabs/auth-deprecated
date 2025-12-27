@@ -17,7 +17,7 @@ const Hello = () => {
     return <div>Error: {error}</div>;
   }
 
-  return <div>Message: {hello?.message}</div>;
+  return <div>Authenticated Message: {hello?.message}</div>;
 };
 
 export default Hello;

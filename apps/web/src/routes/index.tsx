@@ -1,20 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useAuth } from "react-oidc-context";
+import $api from "@/api/client";
 import AuthHello from "@/components/AuthHello";
 import Hello from "@/components/Hello";
+import env from "@/env";
 
 export const Route = createFileRoute("/")({
   component: App,
 });
 
 function App() {
-  const auth = useAuth();
+  const { data: user } = $api.useQuery("get", "/auth/me");
 
-  if (!auth.isAuthenticated) {
+  if (!user?.loggedIn) {
     return (
       <div>
         Unauthenticated.{" "}
-        <button type="button" onClick={() => auth.signinRedirect()}>
+        <button
+          type="button"
+          onClick={() => {
+            window.location.href = `${env.VITE_SERVER_URL}/login?redirect_uri=${window.location.href}`;
+          }}
+        >
           Sign In
         </button>
       </div>
@@ -25,7 +31,12 @@ function App() {
     <>
       <Hello />
       <AuthHello />
-      <button type="button" onClick={() => auth.signoutRedirect()}>
+      <button
+        type="button"
+        onClick={() => {
+          window.location.href = `${env.VITE_SERVER_URL}/logout?redirect_uri=${window.location.href}`;
+        }}
+      >
         Sign Out
       </button>
     </>

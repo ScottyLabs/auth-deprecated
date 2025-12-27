@@ -4,11 +4,9 @@
   "controllerPathGlobs": ["src/controllers/*.ts"],
   "spec": {
     "securityDefinitions": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT",
-        "description": "Enter your bearer token below"
+      "oidc": {
+        "type": "openIdConnect",
+        "openIdConnectUrl": "https://idp.scottylabs.org/realms/scottylabs/.well-known/openid-configuration"
       }
     },
     "basePath": "/",
