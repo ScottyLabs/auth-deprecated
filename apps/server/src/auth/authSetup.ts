@@ -1,3 +1,5 @@
+// Authentication Setup: https://github.com/panva/openid-client/blob/HEAD/examples/passport.ts
+
 import { RedisStore } from "connect-redis";
 import cookieParser from "cookie-parser";
 import type { Express as ExpressApp } from "express";
@@ -12,7 +14,6 @@ import passport, { type AuthenticateOptions } from "passport";
 import { createClient } from "redis";
 import env from "../env";
 
-// Authentication Setup: https://github.com/panva/openid-client/blob/HEAD/examples/passport.ts
 declare global {
   namespace Express {
     interface User {
@@ -80,6 +81,7 @@ export const setupAuth = async (app: ExpressApp) => {
   app.get(
     "/login",
     (req, _res, next) => {
+      // Valid redirect URIs are defined in Keycloak client settings
       if (req.query["redirect_uri"]) {
         req.session.returnTo = req.query["redirect_uri"] as string;
       }
@@ -88,6 +90,7 @@ export const setupAuth = async (app: ExpressApp) => {
     passport.authenticate("openid"),
   );
 
+  // auth callback route similar to example in https://www.passportjs.org/concepts/oauth2/authorization/
   app.get(
     "/auth/callback",
     passport.authenticate("openid", {
@@ -101,6 +104,7 @@ export const setupAuth = async (app: ExpressApp) => {
       res.redirect(
         client.buildEndSessionUrl(config, {
           post_logout_redirect_uri:
+            // Valid post logout redirect URIs are defined in Keycloak client settings
             (req.query["redirect_uri"] as string) ||
             `${req.protocol}://${req.host}`,
         }).href,
