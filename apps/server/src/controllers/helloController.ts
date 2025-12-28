@@ -8,7 +8,6 @@ import { helloService } from "../services/helloService";
 export class HelloController {
   @Get("/")
   async getHello(@Request() req: ExpressRequest) {
-    console.log(req.user);
     return helloService.hello(req.user as Express.User);
   }
 

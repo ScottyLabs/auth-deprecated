@@ -27,7 +27,7 @@ export function expressAuthentication(
         response
           ?.status(401)
           .json({ message: "JWT does not contain required scope." });
-        return reject({});
+        return;
       }
     }
 
