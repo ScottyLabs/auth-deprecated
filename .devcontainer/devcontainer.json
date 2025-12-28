@@ -3,7 +3,7 @@
   "dockerComposeFile": "./docker-compose.yml",
   "service": "dev",
   "workspaceFolder": "/workspace",
-  "postCreateCommand": "./scripts/post-create.sh",
+  "postCreateCommand": "./.devcontainer/post-create.sh",
   "features": {
     "git": {
       "enabled": true
@@ -13,7 +13,9 @@
       "installOhMyZsh": true,
       "installOhMyZshConfig": true,
       "configureZshAsDefaultShell": true
-    }
+    },
+    "ghcr.io/roul/devcontainer-features/vault:1": {},
+    "ghcr.io/devcontainers-extra/features/shfmt:1": {}
   },
   "customizations": {
     "vscode": {
@@ -21,7 +23,8 @@
         "biomejs.biome",
         "bradlc.vscode-tailwindcss",
         "vscode-icons-team.vscode-icons",
-        "davidanson.vscode-markdownlint"
+        "davidanson.vscode-markdownlint",
+        "mkhl.shfmt"
       ],
       "settings": {
         "editor.formatOnSave": true,
