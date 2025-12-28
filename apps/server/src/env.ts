@@ -10,6 +10,7 @@ const envSchema = z.object({
   AUTH_CLIENT_ID: z.string(),
   AUTH_CLIENT_SECRET: z.string(),
   AUTH_SESSION_SECRET: z.string(),
+  REDIS_URL: z.string(),
 });
 
 // Validate `process.env` against our schema and return the result
