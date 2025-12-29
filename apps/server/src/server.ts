@@ -2,14 +2,11 @@ import fs from "node:fs";
 import http from "node:http";
 import { YAML } from "bun";
 import cors, { type CorsOptions } from "cors";
-import type { ErrorRequestHandler } from "express";
 import express from "express";
 import swaggerUi, { type JsonObject } from "swagger-ui-express";
 import { RegisterRoutes } from "../build/routes";
 import { setupAuth } from "./auth/authSetup";
 import env from "./env";
-import { errorHandler } from "./middleware/errorHandler";
-import { notFoundHandler } from "./middleware/notFoundHandler";
 
 const app = express();
 
@@ -28,8 +25,7 @@ const server = http.createServer(app);
 // Swagger
 const file = fs.readFileSync("./build/swagger.yaml", "utf8");
 const swaggerDocument = YAML.parse(file) as JsonObject;
-app.use("/swagger", swaggerUi.serve);
-app.get("/swagger", swaggerUi.setup(swaggerDocument));
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // Setup Authentication
 await setupAuth(app);
@@ -41,8 +37,8 @@ app.get("/", (_req, res) => {
 });
 
 // Register error and not found handlers
-app.use(errorHandler as ErrorRequestHandler);
-app.use(notFoundHandler);
+// app.use(errorHandler as ErrorRequestHandler);
+// app.use(notFoundHandler);
 
 // Start the server
 const port = env.SERVER_PORT;
