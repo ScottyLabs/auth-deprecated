@@ -29,7 +29,7 @@
     "secrets:push": "./scripts/secrets-push.sh",
     "secrets:setup": "VAULT_ADDR=https://secrets.scottylabs.org vault login -method=oidc",
     "syncpack": "syncpack lint",
-    "syncpack:fix": "syncpack fix",
+    "syncpack:fix": "syncpack format && syncpack fix-mismatches",
     "syncpack:update": "syncpack update",
     "tsc": "turbo run tsc"
   },

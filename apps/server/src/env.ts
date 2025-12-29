@@ -10,6 +10,7 @@ const envSchema = z.object({
   AUTH_CLIENT_ID: z.string(),
   AUTH_CLIENT_SECRET: z.string(),
   AUTH_SESSION_SECRET: z.string(),
+  AUTH_JWKS_URI: z.url(),
   REDIS_URL: z.string(),
 });
 

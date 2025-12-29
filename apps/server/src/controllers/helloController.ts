@@ -1,9 +1,10 @@
 import type { Request as ExpressRequest } from "express";
 import { Get, Request, Route, Security } from "tsoa";
-import { ADMIN_SCOPE } from "../auth/authentication";
+import { ADMIN_SCOPE, BEARER_AUTH, OIDC_AUTH } from "../auth/authentication";
 import { helloService } from "../services/helloService";
 
-@Security("oidc")
+@Security(OIDC_AUTH)
+@Security(BEARER_AUTH)
 @Route("hello")
 export class HelloController {
   @Get("/")
