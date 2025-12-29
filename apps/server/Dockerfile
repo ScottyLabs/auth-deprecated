@@ -32,6 +32,7 @@ COPY --from=builder --chown=server:nodejs /app/apps/server/build/swagger.yaml ./
 
 # Copy only what's needed to run the server
 COPY --from=builder --chown=server:nodejs /app/apps/server/dist ./apps/server/dist
+COPY --from=builder --chown=server:nodejs /app/apps/server/node_modules/swagger-ui-dist /app/node_modules/swagger-ui-dist
 
 EXPOSE 3000
 CMD ["bun", "apps/server/dist/server.js"]
