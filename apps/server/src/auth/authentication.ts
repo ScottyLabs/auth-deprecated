@@ -1,6 +1,7 @@
 // https://tsoa-community.github.io/docs/authentication.html#authentication
 // https://medium.com/@alexandre.penombre/tsoa-the-library-that-will-supercharge-your-apis-c551c8989081
 import type * as express from "express";
+import { AuthenticationError } from "../middleware/errorHandler";
 
 export const OIDC_AUTH = "oidc";
 export const ADMIN_SCOPE = "graph-admins";
@@ -11,23 +12,20 @@ export function expressAuthentication(
   scopes?: string[],
 ) {
   return new Promise((resolve, reject) => {
-    const response = request.res;
     if (securityName !== OIDC_AUTH) {
-      response?.status(401).json({ message: "Invalid security name" });
-      return reject({});
+      return reject(new AuthenticationError("Invalid security name"));
     }
 
     if (!request.user) {
-      return reject({});
+      return reject(new AuthenticationError("User not authenticated"));
     }
 
     // Check if the token contains the required scopes
     for (const scope of scopes ?? []) {
       if (!request.user.groups?.includes(scope)) {
-        response
-          ?.status(401)
-          .json({ message: "JWT does not contain required scope." });
-        return;
+        return reject(
+          new AuthenticationError("JWT does not contain required scope."),
+        );
       }
     }
 
