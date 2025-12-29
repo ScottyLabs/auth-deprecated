@@ -28,7 +28,8 @@ const server = http.createServer(app);
 // Swagger
 const file = fs.readFileSync("./build/swagger.yaml", "utf8");
 const swaggerDocument = YAML.parse(file) as JsonObject;
-app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use("/swagger", swaggerUi.serve);
+app.get("/swagger", swaggerUi.setup(swaggerDocument));
 
 // Setup Authentication
 await setupAuth(app);
