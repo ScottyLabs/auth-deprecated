@@ -12,7 +12,7 @@ const app = express();
 
 // Define CORS options
 const corsOptions: CorsOptions = {
-  origin: env.ALLOWED_ORIGINS_REGEX?.split(",").map(
+  origin: env.ALLOWED_ORIGINS_REGEX.split(",").map(
     (origin) => new RegExp(origin),
   ),
   credentials: true,

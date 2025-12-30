@@ -84,9 +84,17 @@ export const setupAuth = async (app: ExpressApp) => {
   app.get(
     "/login",
     (req, _res, next) => {
-      // Valid redirect URIs are defined in Keycloak client settings
-      if (req.query["redirect_uri"]) {
-        req.session.returnTo = req.query["redirect_uri"] as string;
+      const redirectUri = req.query["redirect_uri"] as string;
+      if (redirectUri) {
+        // validate the redirect URI against the allowed origins regex
+        const url = new URL(redirectUri);
+        if (
+          env.ALLOWED_ORIGINS_REGEX.split(",").some((origin) =>
+            new RegExp(origin).test(url.hostname),
+          )
+        ) {
+          req.session.returnTo = redirectUri;
+        }
       }
       next();
     },
@@ -107,7 +115,8 @@ export const setupAuth = async (app: ExpressApp) => {
       res.redirect(
         client.buildEndSessionUrl(config, {
           post_logout_redirect_uri:
-            // Valid post logout redirect URIs are defined in Keycloak client settings
+            // Valid post logout redirect URIs are defined in the Keycloak client settings
+            // so we can always trust the redirect URI here
             (req.query["redirect_uri"] as string) ||
             `${req.protocol}://${req.host}`,
         }).href,
