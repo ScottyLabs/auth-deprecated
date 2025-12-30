@@ -12,7 +12,8 @@ export class HelloController {
     return helloService.hello(req.user as Express.User);
   }
 
-  @Security("oidc", [ADMIN_SCOPE])
+  @Security(OIDC_AUTH, [ADMIN_SCOPE])
+  @Security(BEARER_AUTH, [ADMIN_SCOPE])
   @Get("/authenticated")
   async getAuthenticated(@Request() req: ExpressRequest) {
     return helloService.helloAuthenticated(req.user as Express.User);

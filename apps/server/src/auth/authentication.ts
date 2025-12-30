@@ -81,7 +81,7 @@ const verifyBearerAuth = async (
   if (!token) {
     const err = new AuthenticationError("No token provided");
     request.authErrors?.push(err);
-    return reject({});
+    return reject(err);
   }
 
   jwt.verify(
@@ -106,7 +106,7 @@ const verifyBearerAuth = async (
       if (!decoded || typeof decoded !== "object") {
         const err = new AuthenticationError("Invalid token format");
         request.authErrors?.push(err);
-        return reject({});
+        return reject(err);
       }
 
       // Check if the token contains the required scopes
