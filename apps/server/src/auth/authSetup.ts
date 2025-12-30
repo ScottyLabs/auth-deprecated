@@ -90,7 +90,7 @@ export const setupAuth = async (app: ExpressApp) => {
         const url = new URL(redirectUri);
         if (
           env.ALLOWED_ORIGINS_REGEX.split(",").some((origin) =>
-            new RegExp(origin).test(url.hostname),
+            new RegExp(origin).test(url.origin),
           )
         ) {
           req.session.returnTo = redirectUri;
