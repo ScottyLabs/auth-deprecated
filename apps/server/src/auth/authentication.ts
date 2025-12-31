@@ -121,12 +121,12 @@ const verifyBearerAuth = async (
 // Verify if the groups contain ANY of the required scopes
 const hasAnyScope = (groups?: string[], scopes?: string[]) => {
   // If no scopes are required, return true
-  if (!scopes) {
+  if (!scopes?.length) {
     return true;
   }
 
   // If no groups are present, return false
-  if (!groups) {
+  if (!groups?.length) {
     return false;
   }
 
