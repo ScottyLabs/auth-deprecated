@@ -56,16 +56,20 @@ fi
 if [ "$ENVIRONMENT" == "all" ]; then
   ENVIRONMENT=("${ENVIRONMENTS_OPTIONS[@]}")
 else
-  case "$ENVIRONMENT" in
-  "${ENVIRONMENTS_OPTIONS[@]}")
-    ENVIRONMENT=("$ENVIRONMENT")
-    ;;
-  *)
+  valid=false
+  for opt in "${ENVIRONMENTS_OPTIONS[@]}"; do
+    if [ "$ENVIRONMENT" == "$opt" ]; then
+      ENVIRONMENT=("$ENVIRONMENT")
+      valid=true
+      break
+    fi
+  done
+
+  if [ "$valid" == false ]; then
     echo "Error: Invalid environment: '$ENVIRONMENT'" >&2
     usage
     exit 1
-    ;;
-  esac
+  fi
 fi
 
 # Pull from vault
