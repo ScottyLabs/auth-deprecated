@@ -44,6 +44,10 @@ export const setupAuth = async (app: ExpressApp) => {
   // Initialize session store with Redis
   const redisStore = new RedisStore({ client: redisClient });
 
+  // Trust the Railway proxy when deployed to production
+  // Required for cookie to be secure since Railway uses http in the private network
+  app.set("trust proxy", 1);
+
   app.use(
     session({
       store: redisStore,
