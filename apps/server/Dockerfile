@@ -34,7 +34,5 @@ COPY --from=builder --chown=server:nodejs /app/apps/server/build/swagger.yaml ./
 COPY --from=builder --chown=server:nodejs /app/apps/server/dist ./apps/server/dist
 COPY --from=builder --chown=server:nodejs /app/apps/server/node_modules/swagger-ui-dist /app/node_modules/swagger-ui-dist
 
-ENV NODE_ENV=production
-
 EXPOSE 3000
-CMD ["bun", "apps/server/dist/server.js"]
+CMD ["NODE_ENV=production", "bun", "apps/server/dist/server.js"]
