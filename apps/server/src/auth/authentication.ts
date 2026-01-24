@@ -62,16 +62,30 @@ const validateOidc = async (
       headers: fromNodeHeaders(request.headers),
     });
 
+    // Check if the user is authenticated
     if (!session?.user) {
       const err = new AuthenticationError();
       request.authErrors?.push(err);
       return reject(err);
     }
 
-    console.log(session?.user);
+    // Get the group from the user access token
+    const groups = await auth.api
+      .getAccessToken({
+        body: { providerId: "keycloak" },
+        headers: fromNodeHeaders(request.headers),
+      })
+      .then((accessToken) => {
+        return jwt.decode(accessToken.accessToken) as {
+          groups?: string[];
+        };
+      })
+      .then((groups) => {
+        return groups?.groups;
+      });
 
     // Check if the user has any of the required scopes
-    if (!hasAnyScope(session?.user?.groups ?? [], scopes)) {
+    if (!hasAnyScope(groups ?? [], scopes)) {
       return scopeValidationError(request, reject);
     }
   } catch (error) {
