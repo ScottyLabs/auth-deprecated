@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "dependencies": {
     "@tsoa/runtime": "^6.6.0",
+    "better-auth": "^1.4.17",
     "connect-redis": "^9.0.0",
     "cors": "^2.8.5",
     "express": "^5.1.0",

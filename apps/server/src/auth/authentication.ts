@@ -1,9 +1,12 @@
 // https://tsoa-community.github.io/docs/authentication.html#authentication
 // https://medium.com/@alexandre.penombre/tsoa-the-library-that-will-supercharge-your-apis-c551c8989081
+
+import { fromNodeHeaders } from "better-auth/node";
 import type * as express from "express";
 import jwt from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
 import env from "../env";
+import { auth } from "../lib/auth";
 import {
   AuthenticationError,
   AuthorizationError,
@@ -46,23 +49,36 @@ export function expressAuthentication(
 }
 
 // Verify OpenID Connect Authentication by checking the user object and scopes
-const validateOidc = (
+const validateOidc = async (
   request: express.Request,
   reject: (value: unknown) => void,
   resolve: (value: unknown) => void,
   scopes?: string[],
 ) => {
   // Check if the user is authenticated
-  // (user object is set by the passport.js middleware)
-  if (!request.user) {
+  try {
+    // https://www.better-auth.com/docs/integrations/express
+    const session = await auth.api.getSession({
+      headers: fromNodeHeaders(request.headers),
+    });
+
+    if (!session?.user) {
+      const err = new AuthenticationError();
+      request.authErrors?.push(err);
+      return reject(err);
+    }
+
+    console.log(session?.user);
+
+    // Check if the user has any of the required scopes
+    if (!hasAnyScope(session?.user?.groups ?? [], scopes)) {
+      return scopeValidationError(request, reject);
+    }
+  } catch (error) {
+    console.error("Authentication error:", error);
     const err = new AuthenticationError();
     request.authErrors?.push(err);
     return reject(err);
-  }
-
-  // Check if the user has any of the required scopes
-  if (!hasAnyScope(request.user.groups, scopes)) {
-    return scopeValidationError(request, reject);
   }
 
   return resolve({ ...request.user });

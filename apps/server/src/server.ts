@@ -1,12 +1,13 @@
 import fs from "node:fs";
 import http from "node:http";
+import { toNodeHandler } from "better-auth/node";
 import { YAML } from "bun";
 import cors, { type CorsOptions } from "cors";
 import express, { type ErrorRequestHandler } from "express";
 import swaggerUi, { type JsonObject } from "swagger-ui-express";
 import { RegisterRoutes } from "../build/routes";
-import { setupAuth } from "./auth/authSetup";
 import env from "./env";
+import { auth } from "./lib/auth";
 import { errorHandler } from "./middleware/errorHandler";
 import { notFoundHandler } from "./middleware/notFoundHandler";
 
@@ -35,8 +36,8 @@ app.use(
   swaggerUi.setup(swaggerDocument),
 );
 
-// Setup Authentication
-await setupAuth(app);
+// Setup Authentication: https://www.better-auth.com/docs/integrations/express
+app.all("/api/auth/*splat", toNodeHandler(auth));
 
 // Other Routes
 RegisterRoutes(app);
