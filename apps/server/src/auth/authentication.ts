@@ -24,6 +24,18 @@ declare module "express" {
   }
 }
 
+// TSAO `resolve` will attach the user object to the request object
+declare global {
+  namespace Express {
+    interface User {
+      sub: string;
+      email?: string;
+      given_name?: string;
+      groups?: string[];
+    }
+  }
+}
+
 export function expressAuthentication(
   request: express.Request,
   securityName: string,
@@ -70,32 +82,34 @@ const validateOidc = async (
     }
 
     // Get the group from the user access token
-    const groups = await auth.api
+    const decoded = await auth.api
       .getAccessToken({
         body: { providerId: "keycloak" },
         headers: fromNodeHeaders(request.headers),
       })
       .then((accessToken) => {
-        return jwt.decode(accessToken.accessToken) as {
-          groups?: string[];
-        };
-      })
-      .then((groups) => {
-        return groups?.groups;
+        return jwt.decode(accessToken.accessToken);
       });
 
+    // Check if the decoded token is valid
+    if (decoded === null || typeof decoded !== "object") {
+      const err = new AuthenticationError();
+      request.authErrors?.push(err);
+      return reject(err);
+    }
+
     // Check if the user has any of the required scopes
-    if (!hasAnyScope(groups ?? [], scopes)) {
+    if (!hasAnyScope(decoded["groups"] ?? [], scopes)) {
       return scopeValidationError(request, reject);
     }
+
+    return resolve({ ...decoded });
   } catch (error) {
     console.error("Authentication error:", error);
     const err = new AuthenticationError();
     request.authErrors?.push(err);
     return reject(err);
   }
-
-  return resolve({ ...request.user });
 };
 
 // Verify Bearer Authentication by verifying the token and checking the scopes
