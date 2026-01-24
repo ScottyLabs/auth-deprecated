@@ -2,6 +2,7 @@ import { betterAuth } from "better-auth";
 import { genericOAuth, keycloak } from "better-auth/plugins";
 import env from "../env";
 
+// https://www.better-auth.com/docs/installation#create-a-better-auth-instance
 // https://www.better-auth.com/docs/plugins/generic-oauth#pre-configured-provider-helpers
 export const auth = betterAuth({
   baseURL: env.SERVER_URL,

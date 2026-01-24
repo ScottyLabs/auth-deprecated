@@ -6,13 +6,13 @@ import type * as express from "express";
 import jwt from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
 import env from "../env";
-import { auth } from "../lib/auth";
 import {
   AuthenticationError,
   AuthorizationError,
   type HttpError,
   InternalServerError,
 } from "../middleware/errorHandler";
+import { auth } from "./auth";
 
 export const OIDC_AUTH = "oidc";
 export const BEARER_AUTH = "bearerAuth";

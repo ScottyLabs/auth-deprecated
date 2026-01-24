@@ -1,6 +1,6 @@
 import type { Request as ExpressRequest } from "express";
 import { Get, Request, Route, Security } from "tsoa";
-import { ADMIN_SCOPE, BEARER_AUTH, OIDC_AUTH } from "../auth/authentication";
+import { ADMIN_SCOPE, BEARER_AUTH, OIDC_AUTH } from "../lib/authentication";
 import { helloService } from "../services/helloService";
 
 @Security(OIDC_AUTH)
