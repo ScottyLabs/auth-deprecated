@@ -1,15 +1,10 @@
-# Graph
+# Auth
 
 ## Overview
 
-This is a project that is a social graph for ScottyLabs.
-Currently only used for testing the new auth system.
+This is a website used for testing the new auth system in ScottyLabs.
 
 ## Development
-
-### Permission Prerequisite
-
-Follow the instructions in [Governance](https://github.com/ScottyLabs/governance) to add yourself as a [contributor](https://github.com/ScottyLabs/governance/blob/main/docs/contributors.md) and join the [Graph team](https://github.com/ScottyLabs/governance/blob/main/teams/graph.toml) to obtain the necessary permissions.
 
 ### Dev Container Setup
 

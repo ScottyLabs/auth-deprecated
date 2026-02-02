@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import AuthHello from "@/components/AuthHello";
 import Hello from "@/components/Hello";
-import { signIn, signOut, useSession } from "@/lib/authClient";
+import { signIn, signOut, useSession } from "@/lib/auth/client";
 
 export const Route = createFileRoute("/")({
   component: App,
