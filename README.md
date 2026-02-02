@@ -1,8 +1,13 @@
-# Auth
+# [DEPRECATED] Auth
 
 ## Overview
 
 This is a website used for testing the new auth system in ScottyLabs.
+
+## Deprecation Notice
+
+We are deprecating this repo in favor of using
+[ScottyStack](https://github.com/ScottyLabs/scottystack) for testing auth.
 
 ## Development
 
