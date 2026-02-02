@@ -8,9 +8,9 @@ export const Route = createFileRoute("/")({
 });
 
 function App() {
-  const { data: user } = useSession();
+  const { data: auth } = useSession();
 
-  if (!user?.user) {
+  if (!auth?.user) {
     return (
       <div>
         Unauthenticated.{" "}
@@ -25,6 +25,7 @@ function App() {
     <>
       <Hello />
       <AuthHello />
+      <div>Groups: {auth?.user.groups?.join(", ")}</div>
       <button type="button" onClick={signOut}>
         Sign Out
       </button>

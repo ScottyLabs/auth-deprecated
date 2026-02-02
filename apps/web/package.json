@@ -2,6 +2,7 @@
   "name": "@graph/frontend",
   "version": "0.0.0",
   "dependencies": {
+    "@graph/server": "workspace:*",
     "@react-three/drei": "^10.7.7",
     "@react-three/fiber": "^9.4.0",
     "@tailwindcss/vite": "^4.0.6",

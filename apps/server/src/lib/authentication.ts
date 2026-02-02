@@ -27,6 +27,12 @@ declare module "express" {
 // TSAO `resolve` will attach the user object to the request object
 declare global {
   namespace Express {
+    /**
+     * Express.User interface
+     *
+     * Interface of the user object that is attached to the request object,
+     * used by the server's controller methods.
+     */
     interface User {
       sub: string;
       email?: string;

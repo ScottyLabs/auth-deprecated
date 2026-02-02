@@ -1,13 +1,17 @@
+import type { auth } from "@graph/server/src/lib/auth";
+import { customSessionClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 import env from "@/env";
 
 // https://www.better-auth.com/docs/installation#create-client-instance
-const auth = createAuthClient({
+const authClient = createAuthClient({
   baseURL: env.VITE_SERVER_URL,
+  // https://www.better-auth.com/docs/concepts/session-management#customizing-session-response
+  plugins: [customSessionClient<typeof auth>()],
 });
 
 export const signIn = () => {
-  auth.signIn
+  authClient.signIn
     .social({
       provider: "keycloak",
       callbackURL: window.location.href,
@@ -20,11 +24,11 @@ export const signIn = () => {
 };
 
 export const signOut = () => {
-  auth.signOut().then((result) => {
+  authClient.signOut().then((result) => {
     if (result.error) {
       console.error(result.error);
     }
   });
 };
 
-export const useSession = auth.useSession;
+export const useSession = authClient.useSession;
